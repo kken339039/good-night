@@ -16,6 +16,7 @@ staging:
 
 test:
   <<: *default
+  database: <%= ENV.fetch("POSTGRES_DB") { 'good-night_test' } %>
 
 production:
   <<: *default
