@@ -10,5 +10,12 @@ Rails.application.routes.draw do
         post :check_out
       end
     end
+
+    resources :subscriptions, only: [], controller: 'subscriptions' do
+      collection do
+        post :activate
+        post :deactivate
+      end
+    end
   end
 end
