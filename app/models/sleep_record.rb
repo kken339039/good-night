@@ -13,7 +13,7 @@ class SleepRecord < ApplicationRecord
   validate :valid_only_one_active
 
   def valid_only_one_active
-    active_records = SleepRecord.where(user_id: self.user_id, status: 'active')
+    active_records = SleepRecord.where(user_id: self.user_id, status: 'active').where.not(id: self.id)
     errors.add(:status, "active record can only exist at a time") if active_records.present?
   end
 end
