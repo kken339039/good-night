@@ -3,12 +3,12 @@ class Api::SubscriptionsController < ApplicationController
   before_action :set_subscription
 
   def activate
-    raise SubscribeTargetUserNotFoundError.new("Subscribed User Not Found") if @target_user.nil?
+    raise UserNotFoundError.new("Subscribed user not found") if @target_user.nil?
     @subscription.actived_at = Time.now
     @subscription.save!
 
     render json: { result: "success" }, status: :ok
-  rescue SubscribeTargetUserNotFoundError => ex
+  rescue UserNotFoundError => ex
     Rails.logger.error(ex.to_s)
     render json: ex.as_json, status: ex.status
   rescue => ex
@@ -18,12 +18,12 @@ class Api::SubscriptionsController < ApplicationController
   end
 
   def deactivate
-    raise SubscribeTargetUserNotFoundError.new("Subscribed User Not Found") if @target_user.nil?
+    raise UserNotFoundError.new("Subscribed User Not Found") if @target_user.nil?
     @subscription.actived_at = nil
     @subscription.save!
 
     render json: { result: "success" }, status: :ok
-  rescue SubscribeTargetUserNotFoundError => ex
+  rescue UserNotFoundError => ex
     Rails.logger.error(ex.to_s)
     render json: ex.as_json, status: ex.status
   rescue => ex
@@ -46,12 +46,6 @@ class Api::SubscriptionsController < ApplicationController
 
   def subscribe_params
     params.permit(:user_id, :target_user_id)
-  end
-
-  class SubscribeTargetUserNotFoundError < ApplicationError
-    def status
-      :not_found
-    end
   end
 
   class SubscriptionsControllerError < ApplicationError
