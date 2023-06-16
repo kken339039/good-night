@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_13_085431) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_16_095537) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -21,7 +21,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_13_085431) do
     t.float "duration"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "status"
     t.index ["user_id", "created_at"], name: "index_sleep_records_on_user_id_and_created_at"
+    t.index ["user_id", "duration"], name: "index_sleep_records_on_user_id_and_duration"
+    t.index ["user_id", "status"], name: "index_sleep_records_on_user_id_and_status"
     t.index ["user_id"], name: "index_sleep_records_on_user_id"
   end
 
