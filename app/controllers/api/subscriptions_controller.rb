@@ -17,6 +17,21 @@ class Api::SubscriptionsController < ApplicationController
     render json: error.as_json, status: error.status
   end
 
+  def deactivate
+    raise SubscribeTargetUserNotFoundError.new("Subscribed User Not Found") if @target_user.nil?
+    @subscription.actived_at = nil
+    @subscription.save!
+
+    render json: { result: "success" }, status: :ok
+  rescue SubscribeTargetUserNotFoundError => ex
+    Rails.logger.error(ex.to_s)
+    render json: ex.as_json, status: ex.status
+  rescue => ex
+    Rails.logger.error(ex.to_s)
+    error = SubscriptionsControllerError.new(ex.to_s)
+    render json: error.as_json, status: error.status
+  end
+
   private
 
   def set_target_user
