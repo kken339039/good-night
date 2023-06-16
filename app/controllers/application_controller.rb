@@ -4,7 +4,7 @@ class ApplicationController < ActionController::API
   def set_current_user
     @current_user = User.find_by(id: params[:user_id])
 
-    raise UserNotFoundError.new("Current user not found") if @current_user.nil?
+    raise UserNotFoundError.new("Current User Not Found") if @current_user.nil?
   rescue UserNotFoundError => ex
     Rails.logger.error(ex.to_s)
     render json: ex.as_json, status: ex.status

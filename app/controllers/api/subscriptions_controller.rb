@@ -3,7 +3,7 @@ class Api::SubscriptionsController < ApplicationController
   before_action :set_subscription
 
   def activate
-    raise UserNotFoundError.new("Subscribed user not found") if @target_user.nil?
+    raise UserNotFoundError.new("Subscribed User Not Found") if @target_user.nil?
     @subscription.actived_at = Time.now
     @subscription.save!
 
