@@ -21,4 +21,36 @@ RSpec.describe "Api::SleepRecords", type: :request do
       end
     end
   end
+
+  describe "POST check_out" do
+    let(:user){ create(:user) }
+    let!(:record) { create(:sleep_record, user_id: user.id, status: 'active', check_in_at: Time.now) }
+
+    it "success check out" do
+      post "/api/#{user.id}/sleep_records/check_out"
+
+      expect(response).to have_http_status(200)
+      expect(response.body).to eq({"result": "success"}.to_json)
+    end
+
+    context 'when active record not exist' do
+      let!(:record) { nil }
+
+      it "failed check out" do
+        post "/api/#{user.id}/sleep_records/check_out"
+
+        expect(response).to have_http_status(404)
+        expect(response.body).to eq({"error_message": "Cannot Found check in record"}.to_json)
+      end
+    end
+
+    context 'when update record failed' do
+      it "failed check out" do
+        allow_any_instance_of(SleepRecord).to receive(:update!).and_raise("It has some error")
+        post "/api/#{user.id}/sleep_records/check_out"
+        expect(response).to have_http_status(422)
+        expect(response.body).to eq({"error_message": "It has some error"}.to_json)
+      end
+    end
+  end
 end
