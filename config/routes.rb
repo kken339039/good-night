@@ -11,7 +11,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :subscriptions, only: [], controller: 'subscriptions' do
+    resources :subscriptions, only: [:index], controller: 'subscriptions' do
       collection do
         post :activate
         post :deactivate
