@@ -23,4 +23,5 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'factory_girl_rails'
   gem 'factory_bot'
+  gem 'faker'
 end
