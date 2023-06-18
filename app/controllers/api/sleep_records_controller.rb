@@ -3,7 +3,9 @@ class Api::SleepRecordsController < ApplicationController
 
   def check_in
     check_in_record = SleepRecord.create!(user_id: current_user.id, check_in_at: Time.now, status: 'active')
-    render json: { result: "success" }, status: :ok
+
+    before_records = SleepRecord.where(user_id: current_user.id).order(created_at: :desc)
+    render json: before_records.as_json, status: :ok
   rescue => ex
     Rails.logger.error(ex.to_s)
     error = SleepRecordsControllerError.new(ex.to_s)
