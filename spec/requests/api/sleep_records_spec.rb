@@ -5,10 +5,25 @@ RSpec.describe "Api::SleepRecords", type: :request do
     let(:user){ create(:user) }
 
     it "success check in" do
-      post "/api/#{user.id}/sleep_records/check_in"
+      expect {
+        post "/api/#{user.id}/sleep_records/check_in"
+      }.to change(user.sleep_records, :count).by(1)
 
       expect(response).to have_http_status(200)
-      expect(response.body).to eq({"result": "success"}.to_json)
+    end
+
+    context 'when check in has older data' do
+      let!(:record) { create(:sleep_record, user_id: user.id, status: 'check_out', check_out_at: Time.now) }
+      it "success check in" do
+        expect {
+          post "/api/#{user.id}/sleep_records/check_in"
+        }.to change(user.sleep_records, :count).by(1)
+
+        response_body = JSON.parse(response.body)
+        expect(response).to have_http_status(200)
+        expect(response_body.count).to eq(2)
+        expect(response_body.last['id']).to eq(record.id)
+      end
     end
 
     context 'when active record already exist' do
