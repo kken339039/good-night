@@ -42,6 +42,7 @@ The project exposes the following RESTful API endpoints:
 ```
 
 You can use docker command or command in Makefile
+
 2. build image
 ```
   make build
